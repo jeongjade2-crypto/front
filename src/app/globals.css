@@ -1,26 +1,172 @@
+/*
+ * 전역 스타일 시트
+ * ------------------------------------------------------------
+ * docs/design.md(디자인 규칙 문서)에 정리된 색상·모서리·그림자 값을
+ * CSS 변수로 선언하고, Tailwind CSS v4의 `@theme inline` 문법으로
+ * `bg-primary`, `text-foreground` 같은 유틸리티 클래스 이름에 연결한다.
+ *
+ * 컴포넌트 코드에서는 절대 hex 색상 값을 직접 적지 않고,
+ * 이 파일에서 정의한 이름(예: bg-primary, text-muted-foreground)만 사용한다.
+ * 새 색이 필요하면 이 파일과 docs/design.md를 함께 수정한다.
+ */
 @import "tailwindcss";
 
+/*
+ * Tailwind v4의 다크 모드는 기본적으로 시스템 설정(prefers-color-scheme)을 따르지만,
+ * 이 프로젝트는 사용자가 상단바 버튼으로 직접 라이트/다크를 전환하고 그 값을 저장해야 하므로
+ * `<html class="dark">` 클래스 방식(class 전략)을 쓴다.
+ * 아래 선언으로 "html 태그(또는 그 조상)에 .dark 클래스가 있을 때"를 dark: 접두사로 매칭하게 만든다.
+ */
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* ===== 라이트 테마 (기본값) — docs/design.md 1-3절 ===== */
+  --background: #fdf7fa; /* 페이지 전체 바탕색 */
+  --foreground: #241c24; /* 기본 글자색 */
+  --card: #ffffff; /* 카드/표/모달 배경 */
+  --card-foreground: #241c24; /* 카드 안 글자색 */
+  --sidebar: #fff8fa; /* 사이드바 배경 */
+  --topbar: #ffffff; /* 상단바 배경 */
+  --muted: #f5ebef; /* 은은한 배경(구분선 등) */
+  --muted-foreground: #7a6c75; /* 보조 텍스트 */
+  --disabled-foreground: #b8abb2; /* 비활성화된 버튼/입력칸 글자 */
+  --border: #f0dce4; /* 테두리 */
+  --divider: #f5ebef; /* 목록 항목 사이 구분선 */
+
+  --primary: #c93f73; /* 기본 버튼/링크 배경 (pink-600) */
+  --primary-hover: #a32f5c; /* 기본 버튼 hover/active (pink-700) */
+  --primary-foreground: #ffffff; /* 기본 버튼 글자색 */
+
+  --accent: #e85d8c; /* 단독 사용 포인트 색(아이콘 등, pink-500) */
+  --accent-soft: #fee3ed; /* 연한 강조 배경(pink-100) */
+  --accent-soft-foreground: #a32f5c; /* 연한 강조 배경 위 글자 */
+
+  --success: #1f8a5f;
+  --success-bg: #e7f8f0;
+  --success-border: #beebd3;
+
+  --warning: #9a6400;
+  --warning-bg: #fff6df;
+  --warning-border: #f5dfa0;
+
+  --destructive: #c81e3a;
+  --destructive-bg: #fdecee;
+  --destructive-border: #f6c3cc;
+
+  --info: #2563a8;
+  --info-bg: #eaf2fc;
+  --info-border: #bbd6f2;
+
+  /* 모서리 둥글기 기본값(라이트/다크 공통) — docs/design.md 4-1절 */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius: 12px;
+
+  /* 그림자(box-shadow) — docs/design.md 4-2절 (라이트 테마 값, 브랜드 핑크를 옅게 섞음) */
+  --shadow-sm: 0 1px 2px rgba(36, 28, 36, 0.06);
+  --shadow-md: 0 4px 14px rgba(201, 63, 115, 0.1);
+  --shadow-lg: 0 12px 32px rgba(201, 63, 115, 0.14);
 }
 
+.dark {
+  /* ===== 다크 테마 — docs/design.md 1-4절 ===== */
+  --background: #1b151a;
+  --foreground: #f3e9ee;
+  --card: #241d24;
+  --card-foreground: #f3e9ee;
+  --sidebar: #1f1820;
+  --topbar: #241d24;
+  --muted: #322730;
+  --muted-foreground: #b7a6af;
+  --disabled-foreground: #6e5f68;
+  --border: #3a2e37;
+  --divider: #322730;
+
+  --primary: #c93f73;
+  --primary-hover: #e1548a;
+  --primary-foreground: #ffffff;
+
+  --accent: #f17fa6;
+  --accent-soft: rgba(201, 63, 115, 0.18);
+  --accent-soft-foreground: #f8a5c2;
+
+  --success: #4ade9b;
+  --success-bg: rgba(74, 222, 155, 0.12);
+  --success-border: rgba(74, 222, 155, 0.35);
+
+  --warning: #f5c451;
+  --warning-bg: rgba(245, 196, 81, 0.12);
+  --warning-border: rgba(245, 196, 81, 0.35);
+
+  --destructive: #f2617a;
+  --destructive-bg: rgba(242, 97, 122, 0.14);
+  --destructive-border: rgba(242, 97, 122, 0.4);
+
+  --info: #7eb2f0;
+  --info-bg: rgba(126, 178, 240, 0.12);
+  --info-border: rgba(126, 178, 240, 0.35);
+
+  /* 다크 테마는 배경이 이미 어두우므로 색을 섞지 않고 순수 검정 그림자를 더 진하게 사용 */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.55);
+}
+
+/*
+ * `@theme inline`: 위에서 선언한 CSS 변수를 Tailwind 유틸리티 클래스 이름(색상 토큰)으로 연결한다.
+ * 이렇게 하면 컴포넌트에서 `bg-primary`, `text-muted-foreground` 처럼 이름으로 색을 쓸 수 있다.
+ */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-topbar: var(--topbar);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-disabled-foreground: var(--disabled-foreground);
+  --color-border: var(--border);
+  --color-divider: var(--divider);
+
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-foreground: var(--primary-foreground);
+
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-soft-foreground: var(--accent-soft-foreground);
+
+  --color-success: var(--success);
+  --color-success-bg: var(--success-bg);
+  --color-success-border: var(--success-border);
+
+  --color-warning: var(--warning);
+  --color-warning-bg: var(--warning-bg);
+  --color-warning-border: var(--warning-border);
+
+  --color-destructive: var(--destructive);
+  --color-destructive-bg: var(--destructive-bg);
+  --color-destructive-border: var(--destructive-border);
+
+  --color-info: var(--info);
+  --color-info-bg: var(--info-bg);
+  --color-info-border: var(--info-border);
+
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-background);
+  color: var(--color-foreground);
+  /* 배경/글자 색이 바뀔 때(테마 전환) 화면이 딱딱하게 바뀌지 않도록 부드럽게 전환 */
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
